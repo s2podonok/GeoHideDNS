@@ -1,0 +1,22 @@
+name: DNS Updater
+
+on:
+  workflow_dispatch:
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    environment: DNS
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: pip install requests
+      - name: Run
+        env:
+          DNS_PROVIDER: ${{ vars.DNS }}
+          REDIRECT_URLS: ${{ vars.REDIRECT }}
+          AUTH_SECRET: ${{ secrets.AUTH_SECRET }}
+          CLIENT_ID: ${{ secrets.CLIENT_ID }}
+        run: python update_dns.py
